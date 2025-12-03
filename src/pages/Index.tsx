@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gift, Sparkles, Trophy, Zap } from "lucide-react";
+import { Gift, Sparkles, Trophy, Zap, ArrowDown, ArrowUp } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { CheckoutModal } from "@/components/CheckoutModal";
 import { CourseCard } from "@/components/CourseCard";
 import { SelectionIndicator } from "@/components/SelectionIndicator";
 import { GiftSection } from "@/components/GiftSection";
 import { PriceFooter } from "@/components/PriceFooter";
 import { Confetti } from "@/components/Confetti";
-import { LiveCounter } from "@/components/LiveCounter";
+ 
 
 const courses = [
   { id: "A", name: "Produto A", price: 5000 },
@@ -27,6 +28,10 @@ const Index = () => {
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const giftSectionRef = useRef<HTMLElement | null>(null);
+  const selectionIndicatorRef = useRef<HTMLDivElement | null>(null);
+  const courseGridRef = useRef<HTMLDivElement | null>(null);
 
   const firstSelection = selectedCourses[0];
   const secondSelection = selectedCourses[1];
@@ -56,14 +61,35 @@ const Index = () => {
     }
   };
 
-  const totalOriginal = 10000;
+  const totalOriginal = 12492;
   const totalWithDiscount = 5000;
   const installmentValue = 297;
   const installments = 18;
   const bonusTotal = selectedGifts.length * 597;
 
+  const selectedCourseNames = courses.filter((c) => selectedCourses.includes(c.id)).map((c) => c.name);
+  const selectedGiftNames = gifts.filter((g) => selectedGifts.includes(g.id)).map((g) => g.name);
+
+  useEffect(() => {
+    if (hasSecondSelection && selectedGifts.length === 3) {
+      setCheckoutOpen(true);
+    }
+  }, [hasSecondSelection, selectedGifts]);
+
+  useEffect(() => {
+    if (hasSecondSelection && giftSectionRef.current) {
+      giftSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [hasSecondSelection]);
+
+  useEffect(() => {
+    if (hasFirstSelection && !hasSecondSelection) {
+      (selectionIndicatorRef.current ?? courseGridRef.current)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [hasFirstSelection, hasSecondSelection]);
+
   return (
-    <div className="min-h-screen bg-background pb-40">
+    <div className="min-h-screen bg-background pb-40 pt-12">
       <Confetti active={showConfetti} />
 
       {/* Hero Section */}
@@ -74,10 +100,7 @@ const Index = () => {
         <div className="absolute top-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -translate-y-1/2" />
 
         <div className="relative container mx-auto px-4">
-          {/* Live counter */}
-          <div className="mb-8">
-            <LiveCounter />
-          </div>
+          
 
           {/* Main title */}
           <motion.div
@@ -105,10 +128,7 @@ const Index = () => {
             </p>
           </motion.div>
 
-          {/* Countdown */}
-          <div className="flex justify-center mb-8">
-            <CountdownTimer />
-          </div>
+          <CountdownTimer />
         </div>
       </header>
 
@@ -126,6 +146,19 @@ const Index = () => {
             <span className="font-medium text-sm">Ganhe outro GRÁTIS</span>
           </div>
         </div>
+        {!hasFirstSelection && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center mb-6"
+          >
+            <div className="inline-flex items-center gap-2 bg-coral/10 text-coral px-4 py-2 rounded-full border border-coral/20">
+              <span className="font-semibold text-xs uppercase tracking-wider">Passo 1</span>
+              <span className="text-sm">Escolha seu curso abaixo</span>
+            </div>
+            <ArrowDown className="w-6 h-6 mt-2 text-coral animate-bounce" />
+          </motion.div>
+        )}
 
         {/* Selection indicator */}
         <AnimatePresence>
@@ -135,6 +168,7 @@ const Index = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="mb-8"
+              ref={selectionIndicatorRef}
             >
               <SelectionIndicator />
             </motion.div>
@@ -143,7 +177,7 @@ const Index = () => {
 
         {/* Course cards */}
         <section className="mb-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6" ref={courseGridRef}>
             {courses.map((course, index) => {
               const isSelected = selectedCourses.includes(course.id);
               const isSecondSelection = secondSelection === course.id;
@@ -172,6 +206,16 @@ const Index = () => {
           </div>
         </section>
 
+        {hasFirstSelection && !hasSecondSelection && (
+          <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40">
+            <div className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full shadow">
+              <span className="text-xs font-semibold uppercase">Passo 2</span>
+              <span className="text-sm">Selecione seu 2º curso</span>
+              <ArrowUp className="w-4 h-4" />
+            </div>
+          </div>
+        )}
+
         {/* Gift section */}
         <AnimatePresence>
           {hasSecondSelection && (
@@ -179,7 +223,8 @@ const Index = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              className="mb-12"
+              className="mb-12 scroll-mt-24"
+              ref={giftSectionRef}
             >
               <GiftSection
                 gifts={gifts}
@@ -214,13 +259,22 @@ const Index = () => {
       </main>
 
       {/* Price Footer */}
-      <PriceFooter
-        totalOriginal={totalOriginal}
-        totalWithDiscount={totalWithDiscount}
-        installmentValue={installmentValue}
-        installments={installments}
-        bonusTotal={bonusTotal}
-        canCheckout={hasSecondSelection}
+      {hasSecondSelection && (
+        <PriceFooter
+          totalOriginal={totalOriginal}
+          totalWithDiscount={totalWithDiscount}
+          installmentValue={installmentValue}
+          installments={installments}
+          bonusTotal={bonusTotal}
+          canCheckout={hasSecondSelection}
+          onCheckoutClick={() => setCheckoutOpen(true)}
+        />
+      )}
+      <CheckoutModal
+        open={checkoutOpen}
+        onOpenChange={setCheckoutOpen}
+        courseNames={selectedCourseNames}
+        giftNames={selectedGiftNames}
       />
     </div>
   );

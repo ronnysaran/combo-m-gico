@@ -99,17 +99,20 @@ export const CourseCard = ({
         <div className="flex flex-col items-center">
           {selected && isFreeSelection ? (
             <>
-              <span className="text-sm text-muted-foreground line-through">
-                R$ {price.toLocaleString("pt-BR")},00
+              <span className="text-sm text-muted-foreground line-through decoration-destructive decoration-2">
+                R$ 6.246,00
               </span>
               <span className="font-outfit font-bold text-2xl text-secondary">GRÁTIS!</span>
             </>
           ) : (
             <>
-              <span className="text-sm text-muted-foreground">Valor:</span>
-              <span className="font-outfit font-bold text-xl text-foreground">
-                R$ {price.toLocaleString("pt-BR")},00
+              <span className="text-sm text-muted-foreground line-through decoration-destructive decoration-2">
+                de R$ 6.246
               </span>
+              <div className="flex items-baseline gap-2">
+                <span className="font-outfit font-bold text-2xl md:text-3xl text-primary">R$ 297</span>
+                <span className="text-xs text-muted-foreground">por mês</span>
+              </div>
             </>
           )}
         </div>
