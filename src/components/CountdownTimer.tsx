@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock, Flame } from "lucide-react";
+import { Clock } from "lucide-react";
 
 export const CountdownTimer = () => {
   const [time, setTime] = useState({
@@ -34,33 +34,31 @@ export const CountdownTimer = () => {
   const TimeBox = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
       <div className="relative">
-        <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-b from-secondary to-red-700 rounded-xl flex items-center justify-center border-2 border-secondary/50 shadow-lg">
-          <span className="font-bangers text-3xl md:text-4xl text-foreground glow-text">
+        <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary to-lavender rounded-2xl flex items-center justify-center shadow-lg">
+          <span className="font-outfit font-bold text-3xl md:text-4xl text-primary-foreground">
             {String(value).padStart(2, "0")}
           </span>
         </div>
-        <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full animate-ping" />
       </div>
-      <span className="text-xs md:text-sm text-muted-foreground mt-2 uppercase tracking-wider">
+      <span className="text-xs md:text-sm text-muted-foreground mt-2 font-medium">
         {label}
       </span>
     </div>
   );
 
   return (
-    <div className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-secondary/30">
-      <div className="flex items-center gap-2 text-secondary">
-        <Flame className="w-6 h-6 animate-pulse" />
-        <span className="font-bold text-lg uppercase tracking-wider">
+    <div className="flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-border shadow-lg">
+      <div className="flex items-center gap-2 text-coral">
+        <Clock className="w-5 h-5" />
+        <span className="font-semibold text-sm uppercase tracking-wider">
           Oferta expira em
         </span>
-        <Flame className="w-6 h-6 animate-pulse" />
       </div>
-      <div className="flex gap-3 md:gap-4">
+      <div className="flex gap-3 md:gap-4 items-center">
         <TimeBox value={time.hours} label="Horas" />
-        <span className="font-bangers text-4xl text-primary self-center animate-pulse">:</span>
+        <span className="font-outfit font-bold text-2xl text-primary">:</span>
         <TimeBox value={time.minutes} label="Min" />
-        <span className="font-bangers text-4xl text-primary self-center animate-pulse">:</span>
+        <span className="font-outfit font-bold text-2xl text-primary">:</span>
         <TimeBox value={time.seconds} label="Seg" />
       </div>
     </div>

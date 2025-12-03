@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 const colors = [
-  "hsl(45, 100%, 50%)",
-  "hsl(0, 100%, 60%)",
-  "hsl(160, 100%, 50%)",
-  "hsl(270, 100%, 65%)",
-  "hsl(330, 100%, 60%)",
+  "hsl(250, 84%, 54%)",
+  "hsl(170, 70%, 45%)",
+  "hsl(35, 95%, 55%)",
+  "hsl(260, 60%, 65%)",
+  "hsl(12, 90%, 65%)",
 ];
 
 export const Confetti = ({ active }: { active: boolean }) => {
@@ -42,7 +42,7 @@ export const Confetti = ({ active }: { active: boolean }) => {
             width: "10px",
             height: "10px",
             backgroundColor: piece.color,
-            borderRadius: Math.random() > 0.5 ? "50%" : "0",
+            borderRadius: Math.random() > 0.5 ? "50%" : "2px",
             animationDelay: `${piece.delay}s`,
           }}
         />
