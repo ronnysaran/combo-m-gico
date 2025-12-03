@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Sparkles, Trophy, Zap } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
@@ -35,13 +35,11 @@ const Index = () => {
 
   const handleCourseClick = (courseId: string) => {
     if (selectedCourses.includes(courseId)) {
-      // Deselect
       setSelectedCourses(selectedCourses.filter((id) => id !== courseId));
       if (selectedCourses.length <= 2) {
         setSelectedGifts([]);
       }
     } else if (selectedCourses.length < 2) {
-      // Select
       setSelectedCourses([...selectedCourses, courseId]);
       if (selectedCourses.length === 1) {
         setShowConfetti(true);
@@ -58,9 +56,8 @@ const Index = () => {
     }
   };
 
-  // Calculate totals
-  const totalOriginal = 10000; // 2 courses x R$ 5,000
-  const totalWithDiscount = 5000; // 50% off
+  const totalOriginal = 10000;
+  const totalWithDiscount = 5000;
   const installmentValue = 297;
   const installments = 18;
   const bonusTotal = selectedGifts.length * 597;
@@ -71,10 +68,10 @@ const Index = () => {
 
       {/* Hero Section */}
       <header className="relative overflow-hidden py-8 md:py-12">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/10 via-transparent to-transparent" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
+        {/* Subtle background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl -translate-y-1/2" />
+        <div className="absolute top-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -translate-y-1/2" />
 
         <div className="relative container mx-auto px-4">
           {/* Live counter */}
@@ -88,23 +85,23 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8"
           >
-            <div className="inline-flex items-center gap-2 bg-secondary px-6 py-2 rounded-full mb-4 animate-bounce">
-              <Zap className="w-5 h-5 text-secondary-foreground" />
-              <span className="text-secondary-foreground font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 bg-coral/10 text-coral px-5 py-2 rounded-full mb-4 border border-coral/20">
+              <Zap className="w-4 h-4" />
+              <span className="font-semibold text-sm uppercase tracking-wider">
                 Oferta Relâmpago
               </span>
-              <Zap className="w-5 h-5 text-secondary-foreground" />
+              <Zap className="w-4 h-4" />
             </div>
 
-            <h1 className="font-bangers text-5xl md:text-7xl lg:text-8xl text-foreground mb-4">
-              <span className="text-primary glow-text">COMPRE 1,</span>
+            <h1 className="font-outfit font-bold text-5xl md:text-6xl lg:text-7xl text-foreground mb-4">
+              <span className="gradient-text">COMPRE 1,</span>
               <br />
-              <span className="text-accent glow-text">LEVE 2!</span>
+              <span className="gradient-text-secondary">LEVE 2!</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Escolha <span className="text-primary font-bold">1 curso</span> e ganhe{" "}
-              <span className="text-accent font-bold">outro 100% GRÁTIS</span> + presentes exclusivos!
+              Escolha <span className="text-primary font-semibold">1 curso</span> e ganhe{" "}
+              <span className="text-secondary font-semibold">outro 100% GRÁTIS</span> + presentes exclusivos!
             </p>
           </motion.div>
 
@@ -119,18 +116,18 @@ const Index = () => {
       <main className="container mx-auto px-4">
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-4 mb-8">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${hasFirstSelection ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}>
-            <span className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">1</span>
-            <span className="font-semibold">Escolha seu curso</span>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${hasFirstSelection ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm ${hasFirstSelection ? "bg-primary text-primary-foreground" : "bg-muted-foreground/20 text-muted-foreground"}`}>1</span>
+            <span className="font-medium text-sm">Escolha seu curso</span>
           </div>
           <div className="w-8 h-0.5 bg-border" />
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${hasSecondSelection ? "bg-accent/20 text-accent" : "bg-muted text-muted-foreground"}`}>
-            <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${hasSecondSelection ? "bg-accent text-accent-foreground" : "bg-muted-foreground/30 text-muted-foreground"}`}>2</span>
-            <span className="font-semibold">Ganhe outro GRÁTIS</span>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${hasSecondSelection ? "bg-secondary/10 text-secondary" : "bg-muted text-muted-foreground"}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm ${hasSecondSelection ? "bg-secondary text-secondary-foreground" : "bg-muted-foreground/20 text-muted-foreground"}`}>2</span>
+            <span className="font-medium text-sm">Ganhe outro GRÁTIS</span>
           </div>
         </div>
 
-        {/* Selection indicator - shows after first selection */}
+        {/* Selection indicator */}
         <AnimatePresence>
           {hasFirstSelection && !hasSecondSelection && (
             <motion.div
@@ -149,7 +146,6 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
             {courses.map((course, index) => {
               const isSelected = selectedCourses.includes(course.id);
-              const isFirstSelection = firstSelection === course.id;
               const isSecondSelection = secondSelection === course.id;
               const isDisabled = selectedCourses.length >= 2 && !isSelected;
 
@@ -176,7 +172,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Gift section - shows after both courses selected */}
+        {/* Gift section */}
         <AnimatePresence>
           {hasSecondSelection && (
             <motion.section
@@ -194,7 +190,7 @@ const Index = () => {
           )}
         </AnimatePresence>
 
-        {/* Summary section when complete */}
+        {/* Summary */}
         <AnimatePresence>
           {hasSecondSelection && (
             <motion.div
@@ -202,15 +198,15 @@ const Index = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-8"
             >
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 px-8 py-4 rounded-2xl border border-primary/30">
-                <Trophy className="w-8 h-8 text-primary" />
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 px-8 py-4 rounded-2xl border border-primary/20">
+                <Trophy className="w-7 h-7 text-primary" />
                 <div className="flex flex-col items-start">
                   <span className="text-sm text-muted-foreground">Você está levando:</span>
-                  <span className="font-bold text-lg text-foreground">
+                  <span className="font-semibold text-lg text-foreground">
                     2 Cursos + {selectedGifts.length} Bônus
                   </span>
                 </div>
-                <Sparkles className="w-6 h-6 text-accent animate-pulse" />
+                <Sparkles className="w-5 h-5 text-secondary animate-pulse" />
               </div>
             </motion.div>
           )}
